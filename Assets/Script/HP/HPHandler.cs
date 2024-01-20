@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
+using UnityEngine.UI;
 
 public class HPHandler : NetworkBehaviour
 {
@@ -15,11 +16,41 @@ public class HPHandler : NetworkBehaviour
 
     const byte startingHP = 5;
 
+    public Color uiOnHitColor;
+    public Image uiOnHitImage;
+
+    public MeshRenderer bodyMeshRenderer;
+    Color defaultMeshBodyColor;
+
+    private void Awake()
+    {
+        
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         HP = startingHP;
         isDead = false;
+
+        defaultMeshBodyColor = bodyMeshRenderer.material.color;
+
+        isInitialized = true;
+    }
+
+    IEnumerator OnHitCO()
+    {
+        bodyMeshRenderer.material.color = Color.white;
+
+        if (Object.HasInputAuthority)
+            uiOnHitImage.color = uiOnHitColor;
+
+        yield return new WaitForSeconds(0.2f);
+
+        bodyMeshRenderer.material.color = defaultMeshBodyColor;
+
+        if (Object.HasInputAuthority && !isDead)
+            uiOnHitImage.color = new Color(0, 0, 0, 0);
     }
 
     // Function only called on the server
@@ -44,6 +75,24 @@ public class HPHandler : NetworkBehaviour
     static void OnHPChanged(Changed<HPHandler> changed)
     {
         Debug.Log($"{Time.time} OnHPChanged value {changed.Behaviour.HP}");
+
+        byte newHP = changed.Behaviour.HP;
+
+        // Load the old value
+        changed.LoadOld();
+
+        byte oldHP = changed.Behaviour.HP;
+
+        // check if the hp has been decreased
+        if (newHP < oldHP)
+            changed.Behaviour.OnHPReduced();
+    }
+
+    private void OnHPReduced()
+    {
+        if (!isInitialized) return;
+
+        StartCoroutine(OnHitCO());
     }
 
     static void OnStateChanged(Changed<HPHandler> changed)

@@ -398,6 +398,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   _isDead: 0
+  uiOnHitColor: {r: 0.9622642, g: 0.32226774, b: 0.32226774, a: 0}
+  uiOnHitImage: {fileID: 4152061577975138664}
+  bodyMeshRenderer: {fileID: 6305181074304265685}
 --- !u!1 &5120132704604133777
 GameObject:
   m_ObjectHideFlags: 0
@@ -794,6 +797,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 412d216a5ad17d74b9b005440f876214, type: 3}
+--- !u!114 &4152061577975138664 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5271165560340135115, guid: 412d216a5ad17d74b9b005440f876214, type: 3}
+  m_PrefabInstance: {fileID: 8122777559920883107}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &8424131449805466635 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 311137378708281768, guid: 412d216a5ad17d74b9b005440f876214, type: 3}
