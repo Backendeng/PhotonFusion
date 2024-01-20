@@ -146,6 +146,7 @@ GameObject:
   - component: {fileID: 789528076932941855}
   - component: {fileID: 2207376054903406349}
   - component: {fileID: 7799033117429859210}
+  - component: {fileID: 1289951875464244962}
   m_Layer: 0
   m_Name: NetworkPlayerPF
   m_TagString: Untagged
@@ -226,6 +227,7 @@ MonoBehaviour:
   - {fileID: 3127379059648776416}
   - {fileID: 789528076932941855}
   - {fileID: 2207376054903406349}
+  - {fileID: 1289951875464244962}
   SimulationBehaviours: []
 --- !u!114 &789528076932941855
 MonoBehaviour:
@@ -289,6 +291,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39459ae6bf704e74e9949b8e4c61221e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1289951875464244962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4470653070905388667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10ce2a193568aea4d8d86d61d8f03a78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  _isFiring: 0
+  fireParticleSystem: {fileID: 8900427596665779371}
 --- !u!1 &5120132704604133777
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,6 +598,11 @@ PrefabInstance:
 --- !u!4 &5400071524271983965 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5658371462192531891, guid: 00cf29769d53d074cb3e0464f58e3d4b, type: 3}
+  m_PrefabInstance: {fileID: 321579308308923630}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &8900427596665779371 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 9219661268703932485, guid: 00cf29769d53d074cb3e0464f58e3d4b, type: 3}
   m_PrefabInstance: {fileID: 321579308308923630}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8122777559920883107

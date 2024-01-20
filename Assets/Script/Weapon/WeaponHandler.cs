@@ -8,6 +8,8 @@ public class WeaponHandler : NetworkBehaviour
     [Networked(OnChanged = nameof(OnFireChanged))]
     public bool isFiring {  get; set; }
 
+    public ParticleSystem fireParticleSystem;
+
     float lastTimeFired = 0;
 
     // Start is called before the first frame update
@@ -41,6 +43,8 @@ public class WeaponHandler : NetworkBehaviour
     IEnumerator FireEffectCO()
     {
         isFiring = true;
+
+        fireParticleSystem.Play();
         
         yield return new WaitForSeconds(0.09f);
 
