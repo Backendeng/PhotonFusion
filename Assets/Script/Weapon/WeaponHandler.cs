@@ -99,6 +99,7 @@ public class WeaponHandler : NetworkBehaviour
 
     void OnFireRemote()
     {
-
+        if (!Object.HasInputAuthority)
+            fireParticleSystem.Play();
     }
 }
