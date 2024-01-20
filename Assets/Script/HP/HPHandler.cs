@@ -22,10 +22,10 @@ public class HPHandler : NetworkBehaviour
     public MeshRenderer bodyMeshRenderer;
     Color defaultMeshBodyColor;
 
-    private void Awake()
-    {
+    //private void Awake()
+    //{
         
-    }
+    //}
 
     // Start is called before the first frame update
     void Start()
@@ -33,9 +33,9 @@ public class HPHandler : NetworkBehaviour
         HP = startingHP;
         isDead = false;
 
-        defaultMeshBodyColor = bodyMeshRenderer.material.color;
+        //defaultMeshBodyColor = bodyMeshRenderer.material.color;
 
-        isInitialized = true;
+        //isInitialized = true;
     }
 
     IEnumerator OnHitCO()
