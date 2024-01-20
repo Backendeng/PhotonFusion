@@ -17,7 +17,7 @@ public class NetworkRunnerHandler : MonoBehaviour
     void Start()
     {
         networkRunner = Instantiate(networkRunnerPrefab);
-        networkRunner.name = "Network Name";
+        networkRunner.name = "Network runner";
 
         var clientTask = InitializeNetworkRunner(networkRunner, GameMode.AutoHostOrClient, NetAddress.Any(), SceneManager.GetActiveScene().buildIndex, null);
 
