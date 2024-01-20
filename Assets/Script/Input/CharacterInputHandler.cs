@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CharacterInputHandler : MonoBehaviour
@@ -8,6 +9,7 @@ public class CharacterInputHandler : MonoBehaviour
     Vector2 viewInputVector = Vector2.zero;
     bool isJumpButtonPressed = false;
     bool isFireButtonPressed = false;
+    bool isGrenadeFireButtonPressed = false;
 
     //other components
     LocalCameraHandler localCameraHandler;
@@ -47,9 +49,12 @@ public class CharacterInputHandler : MonoBehaviour
 
         //Fire
         if (Input.GetButtonDown("Fire1"))
-        {
             isFireButtonPressed = true;
-        }
+
+        //Fire
+        if (Input.GetKeyDown(KeyCode.G))
+             isGrenadeFireButtonPressed = true;
+
         //Set view
         localCameraHandler.SetViewInputVector(viewInputVector);
     }
@@ -70,9 +75,13 @@ public class CharacterInputHandler : MonoBehaviour
         // Fire data
         networkInputData.isFireButtonPressed = isFireButtonPressed;
 
+        // Grenade fire data
+        networkInputData.isGrenadeFireButtonPressed= isGrenadeFireButtonPressed;
+
         //Reset variables now that we have read their states
         isJumpButtonPressed = false;
         isFireButtonPressed = false;
+        isGrenadeFireButtonPressed = false;
 
         return networkInputData;
     }
