@@ -5,14 +5,26 @@ using Fusion;
 
 public class WeaponHandler : NetworkBehaviour
 {
+    [Header("Prefabs")]
+    public GrenadeHandler grenadePrefab;
+
+    [Header("Effects")]
+    public ParticleSystem fireParticleSystem;
+
+    [Header("Aim")]
+    public Transform aimPoint;
+
+    [Header("Collision")]
+    public LayerMask collisionLayers;
+
     [Networked(OnChanged = nameof(OnFireChanged))]
     public bool isFiring {  get; set; }
 
-    public ParticleSystem fireParticleSystem;
-    public Transform aimPoint;
-    public LayerMask collisionLayers;
 
     float lastTimeFired = 0;
+
+    //Timing
+    TickTimer grenadeFireDelay = TickTimer.None;
 
     // Start is called before the first frame update
     void Start()
@@ -67,6 +79,18 @@ public class WeaponHandler : NetworkBehaviour
         else Debug.DrawRay(aimPoint.position, aimForwardVector * hitDistance, Color.green, 1);
 
         lastTimeFired = Time.time;
+    }
+
+    void FireGrenade(Vector3 aimForwardVector)
+    {
+        // Check that we have not recently fired a grenade.
+        if (grenadeFireDelay.ExpiredOrNotRunning(Runner))
+        {
+            Runner.Spawn(grenadePrefab, aimPoint.position + aimForwardVector * 1.5f, Quaternion.LookRotation(aimForwardVector), Object.InputAuthority, (runner, spawnedGrende) =>
+            {
+                //spawnedGrende.GetComponent<GrenadeHandler>().Throw(aimForwardVector * 15, Object.InputAuthority, networkPlayer.nickName.ToString());
+            });
+        }
     }
 
     IEnumerator FireEffectCO()
