@@ -82,7 +82,7 @@ public class WeaponHandler : NetworkBehaviour
 
     static void OnFireChanged(Changed<WeaponHandler> changed)
     {
-        // Debug.Log($"{Time.time} OnFireChanged value {changed.Behaviour.isFiring}");
+        Debug.Log($"{Time.time} OnFireChanged value {changed.Behaviour.isFiring}");
 
         bool isFiringCurrent = changed.Behaviour.isFiring;
 
