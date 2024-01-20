@@ -14,6 +14,9 @@ public class Utils : MonoBehaviour
     {
         foreach (Transform trans in transform.GetComponentsInChildren<Transform>(true))
         {
+            if (trans.CompareTag("IgnoreLayerChange"))
+                continue;
+            
             trans.gameObject.layer = layerNumber;
         }
     }
