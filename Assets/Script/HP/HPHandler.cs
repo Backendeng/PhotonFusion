@@ -76,16 +76,16 @@ public class HPHandler : NetworkBehaviour
     {
         Debug.Log($"{Time.time} OnHPChanged value {changed.Behaviour.HP}");
 
-        byte newHP = changed.Behaviour.HP;
+        //byte newHP = changed.Behaviour.HP;
 
-        // Load the old value
-        changed.LoadOld();
+        //// Load the old value
+        //changed.LoadOld();
 
-        byte oldHP = changed.Behaviour.HP;
+        //byte oldHP = changed.Behaviour.HP;
 
-        // check if the hp has been decreased
-        if (newHP < oldHP)
-            changed.Behaviour.OnHPReduced();
+        //// check if the hp has been decreased
+        //if (newHP < oldHP)
+        //    changed.Behaviour.OnHPReduced();
     }
 
     private void OnHPReduced()

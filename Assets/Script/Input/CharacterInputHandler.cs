@@ -48,7 +48,6 @@ public class CharacterInputHandler : MonoBehaviour
         //Fire
         if (Input.GetButtonDown("Fire1"))
         {
-            Debug.Log("fire1");
             isFireButtonPressed = true;
         }
         //Set view
