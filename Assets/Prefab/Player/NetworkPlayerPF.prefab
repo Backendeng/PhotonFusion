@@ -306,6 +306,10 @@ MonoBehaviour:
   _interpolationDataSource: 0
   _isFiring: 0
   fireParticleSystem: {fileID: 8900427596665779371}
+  aimPoint: {fileID: 4881899721948486984}
+  collisionLayers:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &5120132704604133777
 GameObject:
   m_ObjectHideFlags: 0
