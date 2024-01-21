@@ -40,6 +40,9 @@ public class WeaponHandler : NetworkBehaviour
         {
             if (networkInputData.isFireButtonPressed)
                 Fire(networkInputData.aimForwardVector);
+
+            if (networkInputData.isGrenadeFireButtonPressed)
+                FireGrenade(networkInputData.aimForwardVector);
         }
     }
 
@@ -83,12 +86,13 @@ public class WeaponHandler : NetworkBehaviour
 
     void FireGrenade(Vector3 aimForwardVector)
     {
+        Debug.Log("fireGrenade");
         // Check that we have not recently fired a grenade.
         if (grenadeFireDelay.ExpiredOrNotRunning(Runner))
         {
             Runner.Spawn(grenadePrefab, aimPoint.position + aimForwardVector * 1.5f, Quaternion.LookRotation(aimForwardVector), Object.InputAuthority, (runner, spawnedGrende) =>
             {
-                //spawnedGrende.GetComponent<GrenadeHandler>().Throw(aimForwardVector * 15, Object.InputAuthority, networkPlayer.nickName.ToString());
+                spawnedGrende.GetComponent<GrenadeHandler>().Throw(aimForwardVector * 15, Object.InputAuthority, "playername nick");
             });
         }
     }

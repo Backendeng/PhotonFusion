@@ -359,12 +359,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  _isFiring: 0
+  grenadePrefab: {fileID: 8556366990138951883, guid: 0e398312b85364842888b29d168d1031, type: 3}
   fireParticleSystem: {fileID: 8900427596665779371}
   aimPoint: {fileID: 4881899721948486984}
   collisionLayers:
     serializedVersion: 2
     m_Bits: 129
+  _isFiring: 0
 --- !u!114 &5092254734234386346
 MonoBehaviour:
   m_ObjectHideFlags: 0
