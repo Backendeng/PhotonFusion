@@ -113,6 +113,13 @@ public class NetworkRunnerHandler : MonoBehaviour
                 runner.Spawn(resumeNetworkObject, position: characterController.ReadPosition(), rotation: characterController.ReadRotation(), onBeforeSpawned: (runner, newNetworkObject) =>
                 {
                     newNetworkObject.CopyStateFrom(resumeNetworkObject);
+
+                    // Map the connection token with the new Network player
+                    if (resumeNetworkObject.TryGetBehaviour<NetworkPlayer>(out var oldNetworkPlayer))
+                    {
+                        // Store player token for reconnection
+                        FindObjectOfType<Spawner>().SetConnectionTokenMapping(oldNetworkPlayer.token, newNetworkObject.GetComponent<NetworkPlayer>());
+                    }
                 });
             }
         }

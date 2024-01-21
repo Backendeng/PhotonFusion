@@ -15,6 +15,11 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     // Other components
     CharacterInputHandler characterInputHandler;
 
+    void Awake()
+    {
+        mapTokenIDWithNetworkPlayer = new Dictionary<int, NetworkPlayer>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +48,12 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
+    public void SetConnectionTokenMapping(int token, NetworkPlayer networkPlayer)
+    {
+        mapTokenIDWithNetworkPlayer.Add(token, networkPlayer);
+    }
+
+
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) 
     {
         if (runner.IsServer)
@@ -59,7 +70,17 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
                 networkPlayer.GetComponent<NetworkObject>().AssignInputAuthority(player);
             }
+            else
+            {
+                Debug.Log($"Spawing new player for connection tokne {playerToken}");
+                NetworkPlayer spawnedNetworkPlayer = runner.Spawn(playerPrefab, Utils.GetRandomSpawnPoint(), Quaternion.identity, player);
 
+                //Store the token for the player
+                spawnedNetworkPlayer.token = playerToken;
+
+                // Store the mapping between playerToekn and the spawned  network player
+                mapTokenIDWithNetworkPlayer[playerToken] = spawnedNetworkPlayer;
+            }
 
             runner.Spawn(playerPrefab, Utils.GetRandomSpawnPoint(), Quaternion.identity, player);
         }
