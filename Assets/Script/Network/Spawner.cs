@@ -14,10 +14,13 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
     // Other components
     CharacterInputHandler characterInputHandler;
+    SessionListUIHandler sessionListUIHandler;
 
     void Awake()
     {
         mapTokenIDWithNetworkPlayer = new Dictionary<int, NetworkPlayer>();
+
+        sessionListUIHandler = FindObjectOfType<SessionListUIHandler>(true);
     }
 
     // Start is called before the first frame update
@@ -109,7 +112,31 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { Debug.Log("OnConnectRequest"); }
     public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { Debug.Log("OnConnectFailed"); }
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
-    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
+    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) 
+    {
+        // Only update the list of sessions whe the session list UI handler is active
+        if (sessionListUIHandler == null)
+            return;
+
+        if (sessionList.Count == 0)
+        {
+            Debug.Log("Joined lobby no sessions found");
+
+            sessionListUIHandler.OnNoSessionFound();
+        }
+        else
+        {
+            sessionListUIHandler.ClearList();
+
+            foreach (SessionInfo sessionInfo in sessionList)
+            {
+                sessionListUIHandler.AddtToList(sessionInfo);
+
+                Debug.Log($"Found session {sessionInfo.Name} playerCount {sessionInfo.PlayerCount}");
+            }
+        }
+
+    }
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
     public async void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) {
         Debug.Log("OnHostMigration");

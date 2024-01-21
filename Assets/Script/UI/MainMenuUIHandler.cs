@@ -47,6 +47,7 @@ public class MainMenuUIHandler : MonoBehaviour
         HideAllPanles();
 
         sessionBrowserPanel.gameObject.SetActive(true);
+        FindObjectOfType<SessionListUIHandler>(true).OnLookingForGameSessions();
     }
 
     public void OnCreateNewGameClicked()
