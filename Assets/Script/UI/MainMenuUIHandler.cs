@@ -6,22 +6,66 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuUIHandler : MonoBehaviour
 {
+    [Header("Panels")]
+    public GameObject playerDetailsPanel;
+    public GameObject sessionBrowserPanel;
+    public GameObject createSessionPanel;
+    public GameObject statusPanel;
 
-    public TMP_InputField inputField;
+    [Header("Player settings")]
+    public TMP_InputField playerNameInputField;
+
+    [Header("New game session")]
+    public TMP_InputField sessionNameInputField;
 
     // Start is called before the first frame update
     void Start()
     {
         if (PlayerPrefs.HasKey("PlayerNickName"))
-            inputField.text = PlayerPrefs.GetString("PlayerNickName");
+            playerNameInputField.text = PlayerPrefs.GetString("PlayerNickName");
     }
 
-    public void OnJoinGameClicked()
+    void HideAllPanles()
     {
-        PlayerPrefs.SetString("PlayerNickName", inputField.text);
+        playerDetailsPanel.SetActive(false);
+        sessionBrowserPanel.SetActive(false);
+        statusPanel.SetActive(false);
+        createSessionPanel.SetActive(false);
+    }
+
+    public void OnFindGameClicked()
+    {
+        PlayerPrefs.SetString("PlayerNickName", playerNameInputField.text);
         PlayerPrefs.Save();
 
-        SceneManager.LoadScene("world1");
+        GameManager.instance.playerNickName = playerNameInputField.text;
+
+        NetworkRunnerHandler networkRunnerHandler = FindObjectOfType<NetworkRunnerHandler>();
+
+        networkRunnerHandler.OnJoinLobby();
+
+        HideAllPanles();
+
+        sessionBrowserPanel.gameObject.SetActive(true);
+    }
+
+    public void OnCreateNewGameClicked()
+    {
+        HideAllPanles();
+
+        createSessionPanel.SetActive(true);
+    }
+
+    public void OnStartNewSessionClicked()
+    {
+        NetworkRunnerHandler networkRunnerHandler = FindObjectOfType<NetworkRunnerHandler>();
+
+        networkRunnerHandler.CreateGame(sessionNameInputField.text, "World1");
+
+        HideAllPanles();
+
+        statusPanel.gameObject.SetActive(true); 
+
     }
 
 
