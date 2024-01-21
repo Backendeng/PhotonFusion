@@ -25,8 +25,8 @@ public class NetworkRunnerHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (networkRunner == null)
-        {
+        //if (networkRunner == null)
+        //{
             networkRunner = Instantiate(networkRunnerPrefab);
             networkRunner.name = "Network runner";
 
@@ -36,7 +36,7 @@ public class NetworkRunnerHandler : MonoBehaviour
             //}
 
             Debug.Log($"Server NetworkRunner Started.");
-        }
+        //}
     }
 
     public void StartHostMigration(HostMigrationToken hostMigrationToken)

@@ -52,7 +52,16 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
-    public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
+    public async void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) {
+        Debug.Log("OnHostMigration");
+
+        // Shut down the current runner
+        await runner.Shutdown(shutdownReason: ShutdownReason.HostMigration);
+
+        // Find the network runner handler and shtart the host migration
+        FindObjectOfType<NetworkRunnerHandler>().StartHostMigration(hostMigrationToken);
+
+    }
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data) { }
     public void OnSceneLoadDone(NetworkRunner runner) { }
     public void OnSceneLoadStart(NetworkRunner runner) { }
