@@ -30,10 +30,10 @@ public class NetworkRunnerHandler : MonoBehaviour
             networkRunner = Instantiate(networkRunnerPrefab);
             networkRunner.name = "Network runner";
 
-            if (SceneManager.GetActiveScene().name != "MainMenu")
-            {
+            //if (SceneManager.GetActiveScene().name != "MainMenu")
+            //{
                 var clientTask = InitializeNetworkRunner(networkRunner, GameMode.AutoHostOrClient, NetAddress.Any(), SceneManager.GetActiveScene().buildIndex, null);
-            }
+            //}
 
             Debug.Log($"Server NetworkRunner Started.");
         }
