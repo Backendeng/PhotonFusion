@@ -76,7 +76,14 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     public void PlayerLeft(PlayerRef player)
     {
         if (Object.HasStateAuthority)
-            networkInGameMessages.SendInGameRPCMessage(nickName.ToString(), "Left");
+        {
+            //networkInGameMessages.SendInGameRPCMessage(nickName.ToString(), "Left");
+            if (Runner.TryGetPlayerObject(player, out NetworkObject playerLeftNetworkObject))
+            {
+                if (playerLeftNetworkObject == Object)
+                    Local.GetComponent<NetworkInGameMessages>().SendInGameRPCMessage(playerLeftNetworkObject.GetComponent<NetworkPlayer>().nickName.ToString(), "left");
+            }
+        }
 
         if (player == Object.InputAuthority)
         {
