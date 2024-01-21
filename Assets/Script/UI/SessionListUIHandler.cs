@@ -11,6 +11,11 @@ public class SessionListUIHandler : MonoBehaviour
     public GameObject sessionItemListPrefab;
     public VerticalLayoutGroup verticalLayoutGroup;
 
+    private void Awake()
+    {
+        ClearList();
+    }
+
     public void ClearList()
     {
         //Delete all children of the vertical layout group
@@ -19,6 +24,7 @@ public class SessionListUIHandler : MonoBehaviour
             Destroy(child.gameObject);
         }
 
+        Debug.Log("hide status");
         //Hide the status message
         statusText.gameObject.SetActive(false);
     }
