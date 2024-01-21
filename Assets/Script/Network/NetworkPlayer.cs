@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 using TMPro;
+using Unity.VisualScripting;
 
 public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 {
@@ -13,6 +14,16 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     [Networked(OnChanged = nameof(OnNickNameChanged))]
     public NetworkString<_16> nickName {  get; set; }
+
+    bool isPublicJoinMessageSent = false;
+
+    //Other components
+    NetworkInGameMessages networkInGameMessages;
+
+    void Awake()
+    {
+        networkInGameMessages  = GetComponent<NetworkInGameMessages>();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -55,6 +66,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     public void PlayerLeft(PlayerRef player)
     {
+        if (Object.HasStateAuthority)
+            networkInGameMessages.SendInGameRPCMessage(nickName.ToString(), "Left");
+
         if (player == Object.InputAuthority)
         {
             Runner.Despawn(Object);
@@ -81,7 +95,12 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         Debug.Log($"[RPC] SetNickName {nickName}");
         this.nickName = nickName;
 
-         
+        if (!isPublicJoinMessageSent)
+        {
+            networkInGameMessages.SendInGameRPCMessage(nickName, "joined");
+
+            isPublicJoinMessageSent = true;
+        }
     }
 
 }
