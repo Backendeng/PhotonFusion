@@ -31,6 +31,9 @@ public class LocalCameraHandler : MonoBehaviour
         //{
         //    localCamera.transform.parent = null;
         //}
+
+        cameraRotationX = GameManager.instance.cameraViewRotation.x;
+        cameraRotationY = GameManager.instance.cameraViewRotation.y;
     }
 
     // Update is called once per frame
@@ -57,5 +60,14 @@ public class LocalCameraHandler : MonoBehaviour
     public void SetViewInputVector(Vector2 viewInput)
     {
         this.viewInput = viewInput;
+    }
+
+    private void OnDestroy()
+    {
+        if (cameraRotationX != 0 && cameraRotationY !=  0)
+        {
+            GameManager.instance.cameraViewRotation.x = cameraRotationX;
+            GameManager.instance.cameraViewRotation.y = cameraRotationY;
+        }
     }
 }

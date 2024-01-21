@@ -19,6 +19,8 @@ public class HPHandler : NetworkBehaviour
     public Color uiOnHitColor;
     public Image uiOnHitImage;
 
+    public bool skipSettingStarValues = false;
+
     public MeshRenderer bodyMeshRenderer;
     Color defaultMeshBodyColor;
 
@@ -30,12 +32,15 @@ public class HPHandler : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        HP = startingHP;
-        isDead = false;
+        if (!skipSettingStarValues)
+        {
+            HP = startingHP;
+            isDead = false;
+        }
+        
+        defaultMeshBodyColor = bodyMeshRenderer.material.color;
 
-        //defaultMeshBodyColor = bodyMeshRenderer.material.color;
-
-        //isInitialized = true;
+        isInitialized = true;
     }
 
     IEnumerator OnHitCO()

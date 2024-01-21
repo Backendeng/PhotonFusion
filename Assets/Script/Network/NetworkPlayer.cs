@@ -63,7 +63,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             //Enable UI for local player
             localUI.SetActive(true);
 
-            RPC_SetNickName(PlayerPrefs.GetString("PlayerNickName"));
+            RPC_SetNickName(GameManager.instance.playerNickName); 
 
             Debug.Log("Spawned local player");
         }
