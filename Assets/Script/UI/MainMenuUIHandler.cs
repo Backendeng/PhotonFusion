@@ -69,5 +69,11 @@ public class MainMenuUIHandler : MonoBehaviour
 
     }
 
+    public void OnJoiningServer()
+    {
+        HideAllPanles();
+
+        statusPanel.gameObject.SetActive(true);
+    }
 
 }
