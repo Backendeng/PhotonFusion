@@ -82,7 +82,7 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
                 mapTokenIDWithNetworkPlayer[playerToken] = spawnedNetworkPlayer;
             }
 
-            runner.Spawn(playerPrefab, Utils.GetRandomSpawnPoint(), Quaternion.identity, player);
+            //runner.Spawn(playerPrefab, Utils.GetRandomSpawnPoint(), Quaternion.identity, player);
         }
         else Debug.Log("OnPlayerJoined");
     }
