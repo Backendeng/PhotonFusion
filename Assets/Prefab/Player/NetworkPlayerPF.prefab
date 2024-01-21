@@ -363,6 +363,8 @@ MonoBehaviour:
     _length: 0
     _data:
       Data: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  localCameraHandler: {fileID: 4277460019861193323}
+  localUI: {fileID: 8424131449805466639}
 --- !u!114 &6031715001239379408
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -524,7 +526,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  inGameMessageUIHandler: {fileID: 2287050510770314704}
 --- !u!1 &5120132704604133777
 GameObject:
   m_ObjectHideFlags: 0
@@ -1128,17 +1129,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 412d216a5ad17d74b9b005440f876214, type: 3}
---- !u!114 &2287050510770314704 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7999760137790040179, guid: 412d216a5ad17d74b9b005440f876214, type: 3}
-  m_PrefabInstance: {fileID: 8122777559920883107}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0c19b890eb3dc742b77a36c697efd5b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4152061577975138664 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5271165560340135115, guid: 412d216a5ad17d74b9b005440f876214, type: 3}
@@ -1153,5 +1143,10 @@ MonoBehaviour:
 --- !u!224 &8424131449805466635 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 311137378708281768, guid: 412d216a5ad17d74b9b005440f876214, type: 3}
+  m_PrefabInstance: {fileID: 8122777559920883107}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8424131449805466639 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 311137378708281772, guid: 412d216a5ad17d74b9b005440f876214, type: 3}
   m_PrefabInstance: {fileID: 8122777559920883107}
   m_PrefabAsset: {fileID: 0}

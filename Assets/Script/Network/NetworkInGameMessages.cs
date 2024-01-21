@@ -6,7 +6,7 @@ using Fusion;
 public class NetworkInGameMessages : NetworkBehaviour
 {
 
-    public InGameMessageUIHandler inGameMessageUIHandler;
+    InGameMessageUIHandler inGameMessageUIHandler;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +23,9 @@ public class NetworkInGameMessages : NetworkBehaviour
     public void RPC_InGameMessage(string message, RpcInfo info = default)
     {
         Debug.Log($"[RPC] InGameMessage {message}");
+
+        if (inGameMessageUIHandler == null)
+            inGameMessageUIHandler = NetworkPlayer.Local.localCameraHandler.GetComponent<InGameMessageUIHandler>();
 
         if (inGameMessageUIHandler != null)
             inGameMessageUIHandler.OnGameMessageReceived(message);

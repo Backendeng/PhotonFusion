@@ -17,6 +17,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     bool isPublicJoinMessageSent = false;
 
+    public LocalCameraHandler localCameraHandler;
+    public GameObject localUI;
+
     //Other components
     NetworkInGameMessages networkInGameMessages;
 
@@ -56,6 +59,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             // Only 1 audio listner is allowed in the scene do disable rmote players audio listner
             AudioListener audioListener = GetComponentInChildren<AudioListener>();
             audioListener.enabled = false;
+
+            // Disable UI for remoteplayer;
+            localUI.SetActive(false);
 
             Debug.Log("Spawned remote player");
         }
