@@ -15,7 +15,7 @@ public class LocalCameraHandler : MonoBehaviour
 
     // Other components
     NetworkCharacterControllerPrototypeCustom networkCharacterControllerPrototypeCustom;
-    Camera localCamera;
+    public Camera localCamera;
 
     private void Awake()
     {
@@ -26,11 +26,11 @@ public class LocalCameraHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Detach camera if enabled
-        if (localCamera.enabled)
-        {
-            localCamera.transform.parent = null;
-        }
+        ////Detach camera if enabled
+        //if (localCamera.enabled)
+        //{
+        //    localCamera.transform.parent = null;
+        //}
     }
 
     // Update is called once per frame

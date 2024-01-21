@@ -69,6 +69,8 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
                 Debug.Log($"Found old connection token for token {playerToken}. Assigning controlles to that player");
 
                 networkPlayer.GetComponent<NetworkObject>().AssignInputAuthority(player);
+
+                networkPlayer.Spawned();
             }
             else
             {

@@ -47,7 +47,21 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             Utils.SetRenderLayerInChildren(playerModel, LayerMask.NameToLayer("LocalPlayerModel"));
 
             // Disable main camera
-            Camera.main.gameObject.SetActive(false);
+            if (Camera.main != null)
+                Camera.main.gameObject.SetActive(false);
+
+            // Enable 1 audio listner
+            AudioListener audioListener = GetComponentInChildren<AudioListener>();
+            audioListener.enabled = true;
+
+            //Enable the local camera
+            localCameraHandler.localCamera.enabled = true;
+
+            //Detach camera if enabled
+            localCameraHandler.transform.parent = null;
+
+            //Enable UI for local player
+            localUI.SetActive(true);
 
             RPC_SetNickName(PlayerPrefs.GetString("PlayerNickName"));
 
@@ -59,12 +73,12 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             Camera localCamera = GetComponentInChildren<Camera>();
             localCamera.enabled = false;
 
+            // Disable UI for remoteplayer;
+            localUI.SetActive(false);
+
             // Only 1 audio listner is allowed in the scene do disable rmote players audio listner
             AudioListener audioListener = GetComponentInChildren<AudioListener>();
             audioListener.enabled = false;
-
-            // Disable UI for remoteplayer;
-            localUI.SetActive(false);
 
             Debug.Log("Spawned remote player");
         }
@@ -117,6 +131,13 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
             isPublicJoinMessageSent = true;
         }
+    }
+
+    void OnDestroy()
+    {
+        // Get rid of the local camera if we get destroyed as a new one will be spawned with the new Network player
+        if (localCameraHandler != null)
+            Destroy(localCameraHandler.gameObject);
     }
 
 }
