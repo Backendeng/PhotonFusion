@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System;
 using System.Linq;
 using UnityEngine;
+using System.Collections;
 
 public class NetworkRunnerHandler : MonoBehaviour
 {
@@ -114,6 +115,15 @@ public class NetworkRunnerHandler : MonoBehaviour
                 {
                     newNetworkObject.CopyStateFrom(resumeNetworkObject);
 
+                    // Copy info state from old Behaviour to new behaviour
+                    if (resumeNetworkObject.TryGetBehaviour<HPHandler>(out HPHandler oldHPHandler))
+                    {
+                        HPHandler newHPHandler = newNetworkObject.GetComponent<HPHandler>();
+                        newHPHandler.CopyStateFrom(oldHPHandler);
+
+                        newHPHandler.skipSettingStarValues = true;
+                    }
+
                     // Map the connection token with the new Network player
                     if (resumeNetworkObject.TryGetBehaviour<NetworkPlayer>(out var oldNetworkPlayer))
                     {
@@ -124,9 +134,16 @@ public class NetworkRunnerHandler : MonoBehaviour
             }
         }
 
+        StartCoroutine(CleanUpHostMigrationCO());
+
         Debug.Log($"HostMigrationResume completed");
     }
 
+    IEnumerator CleanUpHostMigrationCO()
+    {
+        yield return new WaitForSeconds( 0.5f );
 
+        FindObjectOfType<Spawner>().OnHostingMigrationCleanUp();
+    }
 
 }

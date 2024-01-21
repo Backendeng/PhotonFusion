@@ -124,4 +124,23 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
     public void OnReliableDataReceived(NetworkRunner runner, PlayerRef player, ArraySegment<byte> data) { }
     public void OnSceneLoadDone(NetworkRunner runner) { }
     public void OnSceneLoadStart(NetworkRunner runner) { }
+
+    public void OnHostingMigrationCleanUp()
+    {
+        Debug.Log("Spawner OnHostmigrationCleanUp started");
+
+        foreach (KeyValuePair<int, NetworkPlayer> entry in mapTokenIDWithNetworkPlayer)
+        {
+            NetworkObject networkObjectInDictionary = entry.Value.GetComponent<NetworkObject>();
+
+            if (networkObjectInDictionary.InputAuthority.IsNone)
+            {
+                Debug.Log($"{Time.time} Found player that has not reconneted. Despawning {entry.Value.nickName}");
+
+                networkObjectInDictionary.Runner.Despawn(networkObjectInDictionary);
+            }
+        }
+
+        Debug.Log("Spawner OnHostMigrationCleanUp completed");
+    }
 }
