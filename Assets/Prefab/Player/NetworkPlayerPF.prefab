@@ -356,7 +356,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
+  playerNickNameTM: {fileID: 7983688433896918483}
   playerModel: {fileID: 8173640945087341616}
+  _nickName:
+    _length: 0
+    _data:
+      Data: 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 --- !u!114 &6031715001239379408
 MonoBehaviour:
   m_ObjectHideFlags: 0
