@@ -9,7 +9,16 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 {
     public NetworkPlayer playerPrefab;
 
+    // Mapping between token id and re-created players
+    Dictionary<int, NetworkPlayer> mapTokenIDWithNetworkPlayer;
+
+    // Other components
     CharacterInputHandler characterInputHandler;
+
+    void Awake()
+    {
+        mapTokenIDWithNetworkPlayer = new Dictionary<int, NetworkPlayer>();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -17,21 +26,67 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
         
     }
 
-    public void OnConnectedToServer(NetworkRunner runner)
+    int GetPlayerToken(NetworkRunner runner, PlayerRef player)
     {
-        Debug.Log("OnConnectedToServer");
+        if (runner.LocalPlayer == player)
+        {
+            // Just use the local Player Connection Token
+            return ConnectionTokenUtils.HashToken(GameManager.instance.GetConnectionToken());
+        }
+        else
+        {
+            // Get teh Connection token stored when the client connects to the this host
+            var token = runner.GetPlayerConnectionToken(player);
+
+            if (token != null)
+                return ConnectionTokenUtils.HashToken(token);
+
+            Debug.LogError($"GetPlayerTOken returned invalid token");
+
+            return 0; //invalid
+
+        }
     }
+
+    public void SetConnectionTokenMapping(int token, NetworkPlayer networkPlayer)
+    {
+        mapTokenIDWithNetworkPlayer.Add(token, networkPlayer);
+    }
+
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) 
     {
         if (runner.IsServer)
         {
+            // Get the token for the player
+            int playerToken = GetPlayerToken(runner, player);
+
             Debug.Log("OnPlayerJoined we are server. Spawning player");
+
+            // Check if the token is already recorded by the server.
+            if (mapTokenIDWithNetworkPlayer.TryGetValue(playerToken, out NetworkPlayer networkPlayer))
+            {
+                Debug.Log($"Found old connection token for token {playerToken}. Assigning controlles to that player");
+
+                networkPlayer.GetComponent<NetworkObject>().AssignInputAuthority(player);
+            }
+            else
+            {
+                Debug.Log($"Spawing new player for connection tokne {playerToken}");
+                NetworkPlayer spawnedNetworkPlayer = runner.Spawn(playerPrefab, Utils.GetRandomSpawnPoint(), Quaternion.identity, player);
+
+                //Store the token for the player
+                spawnedNetworkPlayer.token = playerToken;
+
+                // Store the mapping between playerToekn and the spawned  network player
+                mapTokenIDWithNetworkPlayer[playerToken] = spawnedNetworkPlayer;
+            }
+
             runner.Spawn(playerPrefab, Utils.GetRandomSpawnPoint(), Quaternion.identity, player);
         }
         else Debug.Log("OnPlayerJoined");
     }
-    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
+    
     public void OnInput(NetworkRunner runner, NetworkInput input) 
     {
         if (characterInputHandler == null && NetworkPlayer.Local != null) 
@@ -41,14 +96,16 @@ public class Spawner : MonoBehaviour, INetworkRunnerCallbacks
 
         if (characterInputHandler != null)
             input.Set(characterInputHandler.GetNetworkInput());
-        
     
     }
+
+    public void OnConnectedToServer(NetworkRunner runner) { Debug.Log("OnConnectedToServer"); }
+    public void OnPlayerLeft(NetworkRunner runner, PlayerRef player) { }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
-    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
-    public void OnDisconnectedFromServer(NetworkRunner runner) { }
-    public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { }
-    public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { }
+    public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { Debug.Log("OnShutdown"); }
+    public void OnDisconnectedFromServer(NetworkRunner runner) { Debug.Log("OnDisconnectedFromServer"); }
+    public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { Debug.Log("OnConnectRequest"); }
+    public void OnConnectFailed(NetworkRunner runner, NetAddress remoteAddress, NetConnectFailedReason reason) { Debug.Log("OnConnectFailed"); }
     public void OnUserSimulationMessage(NetworkRunner runner, SimulationMessagePtr message) { }
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
     public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }

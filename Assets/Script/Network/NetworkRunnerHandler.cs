@@ -32,7 +32,7 @@ public class NetworkRunnerHandler : MonoBehaviour
 
             //if (SceneManager.GetActiveScene().name != "MainMenu")
             //{
-                var clientTask = InitializeNetworkRunner(networkRunner, GameMode.AutoHostOrClient, NetAddress.Any(), SceneManager.GetActiveScene().buildIndex, null);
+                var clientTask = InitializeNetworkRunner(networkRunner, GameMode.AutoHostOrClient, GameManager.instance.GetConnectionToken(),  NetAddress.Any(), SceneManager.GetActiveScene().buildIndex, null);
             //}
 
             Debug.Log($"Server NetworkRunner Started.");
@@ -62,7 +62,7 @@ public class NetworkRunnerHandler : MonoBehaviour
         return sceneManager;
     }
 
-    protected virtual Task InitializeNetworkRunner(NetworkRunner runner, GameMode gameMode, NetAddress address, SceneRef scene, Action<NetworkRunner> initialized)
+    protected virtual Task InitializeNetworkRunner(NetworkRunner runner, GameMode gameMode, byte [] connectionToken, NetAddress address, SceneRef scene, Action<NetworkRunner> initialized)
     {
         var sceneManager = GetSceneManager(runner);
 
@@ -76,6 +76,7 @@ public class NetworkRunnerHandler : MonoBehaviour
             SessionName = "TestRoom",
             Initialized = initialized,
             SceneManager = sceneManager,
+            ConnectionToken = connectionToken
         });
     }
 
@@ -94,13 +95,36 @@ public class NetworkRunnerHandler : MonoBehaviour
             //Initialized = initialized,
             SceneManager = sceneManager,
             HostMigrationToken = hostMigrationToken, // contains all necessarhy info to restart the runner
-            HostMigrationResume = HostMigrationResume // this will be invoke tho resume in simuation
+            HostMigrationResume = HostMigrationResume, // this will be invoke tho resume in simuation
+            ConnectionToken = GameManager.instance.GetConnectionToken()
         });
     }
 
     void HostMigrationResume(NetworkRunner runner)
     {
+        Debug.Log($"HostMigrationResume started");
 
+        // Get a reference for each Network object form the old Host
+        foreach (var resumeNetworkObject in runner.GetResumeSnapshotNetworkObjects())
+        {
+            // Grab all the player objects, they have a NetworkCharacterControllerPrototypeCustom
+            if (resumeNetworkObject.TryGetBehaviour<NetworkCharacterControllerPrototypeCustom>(out var characterController))
+            {
+                runner.Spawn(resumeNetworkObject, position: characterController.ReadPosition(), rotation: characterController.ReadRotation(), onBeforeSpawned: (runner, newNetworkObject) =>
+                {
+                    newNetworkObject.CopyStateFrom(resumeNetworkObject);
+
+                    // Map the connection token with the new Network player
+                    if (resumeNetworkObject.TryGetBehaviour<NetworkPlayer>(out var oldNetworkPlayer))
+                    {
+                        // Store player token for reconnection
+                        FindObjectOfType<Spawner>().SetConnectionTokenMapping(oldNetworkPlayer.token, newNetworkObject.GetComponent<NetworkPlayer>());
+                    }
+                });
+            }
+        }
+
+        Debug.Log($"HostMigrationResume completed");
     }
 
 
