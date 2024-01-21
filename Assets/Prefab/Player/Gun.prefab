@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 3036978360173094683}
   m_Layer: 0
   m_Name: aimCapsule
-  m_TagString: Untagged
+  m_TagString: IgnoreLayerChange
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
